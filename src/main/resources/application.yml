@@ -1,0 +1,8 @@
+zuul:
+  routes:
+    products:
+      path: /products/**
+      url: http://localhost:8080/api/products
+
+server:
+  port: 8081
