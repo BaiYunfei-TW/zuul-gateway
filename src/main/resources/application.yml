@@ -1,8 +1,14 @@
 zuul:
   routes:
     products:
-      path: /products/**
-      url: http://localhost:8080/api/products
+      path: /api/products/**
+      stripPrefix: false
+      serviceId: products
+
+products:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.example.zuulgateway.loadBalanceRole.TimesWeightBaseRule
+    listOfServers: http://localhost:8081, http://localhost:8082
 
 server:
-  port: 8081
+  port: 8080

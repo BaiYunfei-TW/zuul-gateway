@@ -5,6 +5,7 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.POST_TYPE;
@@ -29,8 +30,9 @@ public class AddNameFilter extends ZuulFilter {
 
     @Override
     public Object run() throws ZuulException {
-        HttpServletResponse response = RequestContext.getCurrentContext().getResponse();
-        response.addHeader("x-user-name", "Yunfei");
+//        HttpServletResponse response = RequestContext.getCurrentContext().getResponse();
+//        HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+//        response.addHeader("x-sever-name", request.getLocalName() + ":" + request.getLocalPort());
         return null;
     }
 }
