@@ -9,10 +9,10 @@ zuul:
 products:
   ribbon:
     NFLoadBalancerRuleClassName: com.example.zuulgateway.loadBalanceRole.MyRandomRule
-    listOfServers: http://localhost:8081, http://localhost:8082, http://localhost:8083, http://localhost:8084
+    listOfServers: http://localhost:8081, http://localhost:8082, http://localhost:8083
     retryableStatusCodes: 404,500
     MaxAutoRetries: 1
-    MaxAutoRetriesNextServer: 3
+    MaxAutoRetriesNextServer: 2
     OkToRetryOnAllOperations: true
 
 server:

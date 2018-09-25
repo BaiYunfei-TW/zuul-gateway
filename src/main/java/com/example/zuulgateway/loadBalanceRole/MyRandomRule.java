@@ -5,15 +5,19 @@ import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 import com.netflix.loadbalancer.WeightedResponseTimeRule;
+import com.netflix.util.Pair;
 import com.netflix.zuul.context.RequestContext;
+import org.aspectj.weaver.ast.Var;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TimesWeightBaseRule extends AbstractLoadBalancerRule {
+public class MyRandomRule extends AbstractLoadBalancerRule {
+    private static final String TRIED_SERVERS = "tried-servers";
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void initWithNiwsConfig(IClientConfig clientConfig) {
@@ -56,7 +60,15 @@ public class TimesWeightBaseRule extends AbstractLoadBalancerRule {
                 continue;
             }
 
-            if (server.isAlive()) {
+            RequestContext ctx = RequestContext.getCurrentContext();
+            if (ctx.get(TRIED_SERVERS) == null) {
+                ctx.set(TRIED_SERVERS, new HashSet<String>());
+            }
+            Set<String> triedServers = (HashSet<String>) ctx.get(TRIED_SERVERS);
+            if (server.isAlive() && !triedServers.contains(server.getId())) {
+                triedServers.add(server.getId());
+                ctx.set(TRIED_SERVERS, triedServers);
+                logger.debug("choose server: " + server.getId());
                 return (server);
             }
 
