@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -27,7 +28,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
             .and()
                 .addFilterBefore(new CustomBasicTokenFilter(authenticationManager()), BasicAuthenticationFilter.class)
-                .addFilterAfter(new CustomSimpleTokenFilter(), CustomBasicTokenFilter.class);
+                .addFilterBefore(new CustomSimpleTokenFilter(), CustomBasicTokenFilter.class)
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean
@@ -40,7 +43,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
         jdbcUserDetailsManager.setUsersByUsernameQuery("SELECT id, password, enable FROM users WHERE username=?");
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("SELECT  userId, authority FROM authorities WHERE userId=?");
-        jdbcUserDetailsManager.setGroupAuthoritiesByUsernameQuery("SELECT userId, authority FROM authorities WHERE userId=?");
         jdbcUserDetailsManager.setDataSource(dataSource);
         jdbcUserDetailsManager.setJdbcTemplate(jdbcTemplate);
         return jdbcUserDetailsManager;
