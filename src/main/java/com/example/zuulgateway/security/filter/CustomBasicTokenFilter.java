@@ -1,7 +1,7 @@
-package com.example.zuulgateway.security;
+package com.example.zuulgateway.security.filter;
 
+import com.example.zuulgateway.security.token.CustomBasicToken;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,8 +35,14 @@ public class CustomBasicTokenFilter extends OncePerRequestFilter {
         String username = token.split(":")[0];
         String password = token.split(":")[1];
 
-        Authentication requestToken = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authenticateResult = authenticationManager.authenticate(requestToken);
+        Authentication requestToken = new CustomBasicToken(username, password);
+        Authentication authenticateResult = null;
+        try {
+            authenticateResult = authenticationManager.authenticate(requestToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            filterChain.doFilter(request, response);
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authenticateResult);
         filterChain.doFilter(request, response);

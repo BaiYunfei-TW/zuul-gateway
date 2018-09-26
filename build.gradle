@@ -7,6 +7,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.flywaydb:flyway-gradle-plugin:5.0.7")
 	}
 }
 
@@ -14,6 +15,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.flywaydb.flyway'
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
@@ -33,6 +35,9 @@ dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-netflix-zuul')
 	compile('org.springframework.retry:spring-retry')
 	compile("org.springframework.boot:spring-boot-starter-security")
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.flywaydb:flyway-core')
+	compile('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
@@ -40,4 +45,10 @@ dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
+}
+
+flyway {
+	url = 'jdbc:mysql://localhost:3306/gateway'
+	user = 'root'
+	password = '123456'
 }
