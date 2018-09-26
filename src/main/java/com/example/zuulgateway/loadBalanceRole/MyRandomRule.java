@@ -4,15 +4,14 @@ import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
-import com.netflix.loadbalancer.WeightedResponseTimeRule;
-import com.netflix.util.Pair;
 import com.netflix.zuul.context.RequestContext;
-import org.aspectj.weaver.ast.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class MyRandomRule extends AbstractLoadBalancerRule {
     private static final String TRIED_SERVERS = "tried-servers";
