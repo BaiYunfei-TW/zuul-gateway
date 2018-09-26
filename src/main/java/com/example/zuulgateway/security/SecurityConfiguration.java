@@ -2,10 +2,13 @@ package com.example.zuulgateway.security;
 
 import com.example.zuulgateway.security.filter.CustomBasicTokenFilter;
 import com.example.zuulgateway.security.filter.CustomSimpleTokenFilter;
+import com.example.zuulgateway.security.provider.CustomBasicAuthenticationProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,14 +20,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import javax.sql.DataSource;
 
 @EnableWebSecurity
-@Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/tokens").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .addFilterBefore(new CustomBasicTokenFilter(authenticationManager()), BasicAuthenticationFilter.class)
@@ -47,4 +48,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         jdbcUserDetailsManager.setJdbcTemplate(jdbcTemplate);
         return jdbcUserDetailsManager;
     }
+
 }

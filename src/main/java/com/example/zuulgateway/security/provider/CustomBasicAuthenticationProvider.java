@@ -28,7 +28,10 @@ public class CustomBasicAuthenticationProvider implements AuthenticationProvider
         String username = authentication.getPrincipal().toString();
         UserDetails user = userDetailsManager.loadUserByUsername(username);
         if (passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
-            return new CustomBasicToken(username, user.getAuthorities());
+            CustomBasicToken authResult =  new CustomBasicToken(username, user.getAuthorities());
+            authResult.setDetails(user.getUsername());
+
+            return authResult;
         }
         throw new BadCredentialsException("Invalid username or password");
     }
