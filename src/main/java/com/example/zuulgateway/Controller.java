@@ -3,6 +3,7 @@ package com.example.zuulgateway;
 import com.example.zuulgateway.security.token.CustomBasicToken;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,8 @@ import java.util.Base64;
 public class Controller {
 
     @GetMapping("/tokens")
-    public ResponseEntity token(Authentication principal) throws UnsupportedEncodingException {
-        String token = Base64.getEncoder().encodeToString(principal.getDetails().toString().getBytes("utf-8"));
+    public ResponseEntity token(Principal principal) throws UnsupportedEncodingException {
+        String token = Base64.getEncoder().encodeToString(principal.getName().getBytes("utf-8"));
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.AUTHORIZATION, token)
