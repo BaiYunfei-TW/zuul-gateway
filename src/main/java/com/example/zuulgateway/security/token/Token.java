@@ -3,23 +3,23 @@ package com.example.zuulgateway.security.token;
 import java.util.List;
 
 public class Token {
-    private String usserId;
+    private String userId;
     private List<String> role;
 
     public Token() {
     }
 
-    public Token(String usserId, List<String> role) {
-        this.usserId = usserId;
+    public Token(String userId, List<String> role) {
+        this.userId = userId;
         this.role = role;
     }
 
-    public String getUsserId() {
-        return usserId;
+    public String getUserId() {
+        return userId;
     }
 
-    public Token setUsserId(String usserId) {
-        this.usserId = usserId;
+    public Token setUserId(String userId) {
+        this.userId = userId;
         return this;
     }
 

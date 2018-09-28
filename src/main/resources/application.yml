@@ -3,17 +3,19 @@ zuul:
     products:
       path: /api/products/**
       stripPrefix: false
-      serviceId: products
-  retryable: true
+      serviceId: store-product
+      retryable: true
+    orders:
+      path: /api/users/*/orders/**
+      stripPrefix: false
+      serviceId: store-order
+      retryable: true
 
-products:
-  ribbon:
-    NFLoadBalancerRuleClassName: com.example.zuulgateway.loadBalanceRole.MyRandomRule
-    listOfServers: http://localhost:8081
-    retryableStatusCodes: 404,500
-    MaxAutoRetries: 1
-    MaxAutoRetriesNextServer: 3
-    OkToRetryOnAllOperations: true
+ribbon:
+  retryableStatusCodes: 404,500
+  MaxAutoRetries: 2
+  MaxAutoRetriesNextServer: 3
+  OkToRetryOnAllOperations: true
 
 spring:
   datasource:
@@ -23,6 +25,14 @@ spring:
 
   jpa:
     show-sql: true
+
+  application:
+    name: gateway
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8079/eureka
 
 server:
   port: 8080
