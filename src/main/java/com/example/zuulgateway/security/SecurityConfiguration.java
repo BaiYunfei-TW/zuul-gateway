@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                     .and()
                         .addFilterAfter(new CustomSimpleTokenFilter(authenticationManager()), BasicAuthenticationFilter.class)
+                    .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         }
     }
